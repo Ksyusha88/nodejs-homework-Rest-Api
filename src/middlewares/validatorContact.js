@@ -18,13 +18,12 @@ const shemaUpdateContact = Joi.object({
     .pattern(/[()][0-9]{3}[)] [0-9]{3}-[0-9]{4}/)
     .optional(),
 
-    favorite:Joi.boolean().optional(),
-}).xor('name', 'email', 'phone', 'favorite');
+  favorite: Joi.boolean().optional(),
+}).xor('name', 'email', 'phone', 'favorite')
 
 const shemaUpdateContactFavoriteStatus = Joi.object({
   favorite: Joi.boolean().required(),
-});
-
+})
 
 const validate = async (schema, obj, next) => {
   try {
@@ -42,7 +41,7 @@ module.exports = {
   updateValidationContact: (req, res, next) => {
     return validate(shemaUpdateContact, req.body, next)
   },
-  shemaUpdateContactFavoriteStatus:(req, res, next) =>{
+  shemaUpdateContactFavoriteStatus: (req, res, next) => {
     return validate(shemaUpdateContactFavoriteStatus, req.body, next)
   }
 }
