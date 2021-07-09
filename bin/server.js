@@ -1,5 +1,5 @@
 const app = require('../app')
-const { connectMongo } = require('../db/connection.js')
+const { connectMongo } = require('../db/connection')
 require('dotenv').config()
 
 const PORT = process.env.PORT || 3000

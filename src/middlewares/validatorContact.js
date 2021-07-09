@@ -34,11 +34,6 @@ const validate = async (schema, obj, next) => {
   }
 }
 
-const shemaAuthValidation = Joi.object({
-  password: Joi.string().min(6).max(50).alphanum().required(),
-  email: Joi.string().min(3).max(50).required(),
-})
-
 module.exports = {
   addValidationContact: (req, res, next) => {
     return validate(shemaAddContact, req.body, next)
@@ -48,8 +43,5 @@ module.exports = {
   },
   shemaUpdateContactFavoriteStatus: (req, res, next) => {
     return validate(shemaUpdateContactFavoriteStatus, req.body, next)
-  },
-  shemaAuthValidation: (req, res, next) => {
-    return validate(shemaAuthValidation, req.body, next)
   }
 }
