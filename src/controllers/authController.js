@@ -33,5 +33,5 @@ module.exports = {
   registrationController,
   loginController,
   logoutController,
-  currentUserController
+  currentUserController,
 }
