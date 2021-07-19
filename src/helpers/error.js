@@ -33,10 +33,18 @@ class NotAuthorizedError extends NodeError {
   }
 }
 
+class NotFindUser extends NodeError {
+  constructor(message) {
+    super(message)
+    this.status = 404
+  }
+}
+
 module.exports = {
   NodeError,
   ValidationError,
   RegistrationConflictError,
   WrongParametersError,
-  NotAuthorizedError
+  NotAuthorizedError,
+  NotFindUser
 }

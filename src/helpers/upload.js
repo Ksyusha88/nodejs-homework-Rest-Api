@@ -3,7 +3,7 @@ require('dotenv').config()
 const multer = require('multer')
 
 const AVATARS_DIR = path.join(process.cwd(), process.env.AVATARS_DIR)
-const TEMP_DIR = path.join(process.cwd(), process.env.TEMP_DIR)
+// const TEMP_DIR = path.join(process.cwd(), process.env.TEMP_DIR)
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -27,6 +27,6 @@ const upload = multer({
 
 module.exports = {
   upload,
-  AVATARS_DIR,
-  TEMP_DIR
+  AVATARS_DIR
+  // TEMP_DIR
 }
