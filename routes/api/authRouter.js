@@ -12,9 +12,12 @@ const {
   currentUserController
 } = require('../../src/controllers/authController')
 
+const { avatarsController } = require('../../src/controllers/avatarsController')
+const upload = require('../../src/helpers/upload')
+
 router.post('/registration', shemaAuthValidation, asyncWrapper(registrationController))
 router.post('/login', shemaAuthValidation, asyncWrapper(loginController))
 router.post('/logout', authMiddleware, asyncWrapper(logoutController))
 router.get('/current', authMiddleware, asyncWrapper(currentUserController))
-
+router.patch('/avatars', upload.single('avatar'), asyncWrapper(avatarsController))
 module.exports = router
