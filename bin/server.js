@@ -3,7 +3,8 @@ const { connectMongo } = require('../db/connection.js')
 const fs = require('fs').promises
 require('dotenv').config()
 
-const { TEMP_DIR, AVATARS_DIR } = require('../src/helpers/upload')
+// const { TEMP_DIR, AVATARS_DIR } = require('../src/helpers/upload')
+const { AVATARS_DIR } = require('../src/helpers/upload')
 
 const PORT = process.env.PORT || 3000
 
@@ -23,7 +24,7 @@ const start = async () => {
   try {
     await connectMongo()
     app.listen(PORT, async (err) => {
-      await createFolderIsNotExist(TEMP_DIR)
+      // await createFolderIsNotExist(TEMP_DIR)
       await createFolderIsNotExist(AVATARS_DIR)
       if (err) {
         console.error('Error at server lanch', err)

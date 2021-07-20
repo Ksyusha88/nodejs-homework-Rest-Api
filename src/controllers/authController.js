@@ -2,7 +2,9 @@ const {
   registration,
   login,
   logout,
-  current
+  current,
+  verifyEmail,
+  repeatEmailVerify
 } = require('../../services/authService')
 
 const registrationController = async (req, res, next) => {
@@ -29,9 +31,22 @@ const currentUserController = async (req, res) => {
   res.status(200).json(user)
 }
 
+const verifyEmailController = async (req, res) => {
+  await verifyEmail(req.params.verificationToken)
+  res.status(200).json({ message: 'Verification successful' })
+}
+
+const repeatEmailVerifyController = async (req, res) => {
+  const { email } = req.body
+  await repeatEmailVerify(email)
+  res.status(200).json({ message: 'Verification email sent' })
+}
+
 module.exports = {
   registrationController,
   loginController,
   logoutController,
   currentUserController,
+  verifyEmailController,
+  repeatEmailVerifyController
 }

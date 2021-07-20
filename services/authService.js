@@ -1,8 +1,13 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { v4: uuidv4 } = require('uuid')
+const sgMail = require('@sendgrid/mail')
+require('dotenv').config()
 
 const { User } = require('../db/userModal')
-const { NotAuthorizedError, RegistrationConflictError } = require('../src/helpers/error')
+const { NotAuthorizedError, RegistrationConflictError, NotFindUser, WrongParametersError } = require('../src/helpers/error')
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const registration = async (email, password) => {
   const registEmail = await User.findOne({ email })
@@ -10,9 +15,19 @@ const registration = async (email, password) => {
     throw new RegistrationConflictError('Email in use')
   }
   const newUser = new User({
-    email, password
+    email, password, verifyToken: uuidv4(),
   })
   await newUser.save()
+
+  const msg = {
+    to: email,
+    from: 'ksyusha.gorelova@gmail.com',
+    subject: 'Thank you for registration!',
+    text: 'and easy to do anywhere, even with Node.js',
+    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  }
+  await sgMail.send(msg)
+
   return {
     user: {
       email: newUser.email,
@@ -61,10 +76,44 @@ const current = async ({ userId, token }) => {
   }
   return currentUser
 }
+const verifyEmail = async verificationToken => {
+  if (!(await User.findOne({ verifyToken: verificationToken }))) {
+    throw new NotFindUser('User not found')
+  }
+  await User.findOneAndUpdate(
+    {
+      verifyToken: verificationToken,
+      verify: false,
+    },
+    {
+      $set: {
+        verify: true,
+        verifyToken: null,
+      },
+    },
+  )
+}
 
+const repeatEmailVerify = async email => {
+  if (await User.findOne({ email, verify: true })) {
+    throw new WrongParametersError('Verification has already been passed')
+  }
+  const user = await User.findOne({ email, verify: false })
+  const msg = {
+    to: user.email,
+    from: 'ksyusha.gorelova@gmail.com',
+    subject: 'Thank you for registration!',
+    text: 'and easy to do anywhere, even with Node.js',
+    html: '<strong>and easy to do anywhere, even with Node.js</strong>'
+  }
+
+  await sgMail.send(msg)
+}
 module.exports = {
   registration,
   login,
   logout,
-  current
+  current,
+  verifyEmail,
+  repeatEmailVerify
 }

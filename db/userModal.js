@@ -27,6 +27,14 @@ const userScheme = new mongoose.Schema({
       return gravatar.url(this.email, { protocol: 'http', s: '100' }, true)
     },
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verifyToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
 })
 
 userScheme.pre('save', async function() {
